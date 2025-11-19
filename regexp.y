@@ -9,7 +9,8 @@ int yyerror(const char *s) {
     return 0;
 }
 
-struct expr_node *root = 0;
+struct expr_node *left = 0;
+struct expr_node *right = 0;
 %}
 
 %start program
@@ -28,7 +29,7 @@ struct expr_node *root = 0;
 
 %%
 program:
-    expr { root = $1; }
+    expr expr { left = $1; right = $2; }
     ;
 
 expr:
@@ -44,9 +45,14 @@ expr:
 int main() {
     if (0 == yyparse()) {
         printf("successfully parsed\n");
-        if (0 != root) {
-            print_expr_node(root, 0);
-            free_expr_node(root);
+        if (0 != left && 0 != right) {
+            printf("left:\n");
+            print_expr_node(left, 0);
+            printf("right:\n");
+            print_expr_node(right, 0);
+
+            free_expr_node(left);
+            free_expr_node(right);
         }
     } else {
         printf("something went wrong\n");
