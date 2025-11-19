@@ -13,6 +13,10 @@
     devShells = eachSystem ({ pkgs, ... }: {
       default = pkgs.callPackage ./shell.nix {};
     });
-    packages = eachSystem ({ pkgs, ... }: {});
+    packages = eachSystem ({ pkgs, ... }: let
+      lexer = grammar-file: pkgs.callPackage ./lexer.nix { inherit grammar-file; };
+    in {
+      regexp-lexer = lexer ./regexp.l;
+    });
   };
 }
