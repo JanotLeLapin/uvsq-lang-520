@@ -7,7 +7,10 @@ op [+.*]
 
 %%
 
-{const} { return CONST; }
+{const} {
+  yylval.c = yytext[0];
+  return CONST;
+}
 "+" { return '+'; }
 "." { return '.'; }
 "*" { return '*'; }
