@@ -1,23 +1,22 @@
-{ flex
+{ bison
 , stdenv
 
 , name
-, lexer-file
+, parser-file
 }: stdenv.mkDerivation {
-  name = "${name}-lexer";
+  name = "${name}-parser";
 
-  src = lexer-file;
+  src = parser-file;
   dontUnpack = true;
 
   buildInputs = [
-    flex
+    bison
   ];
   buildPhase = ''
-    flex $src
+    yacc -d $src
   '';
-
   installPhase = ''
     mkdir -p $out/lib
-    cp *.yy.c $out/lib
+    cp *.tab.* $out/lib
   '';
 }

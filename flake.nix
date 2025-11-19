@@ -14,9 +14,13 @@
       default = pkgs.callPackage ./shell.nix {};
     });
     packages = eachSystem ({ pkgs, ... }: let
-      lexer = grammar-file: pkgs.callPackage ./lexer.nix { inherit grammar-file; };
-    in {
-      regexp-lexer = lexer ./regexp.l;
+      lexer = name: lexer-file: pkgs.callPackage ./lexer.nix { inherit name lexer-file; };
+      parser = name: parser-file: pkgs.callPackage ./parser.nix { inherit name parser-file; };
+      compiler = name: lexer: parser: pkgs.callPackage ./compiler.nix { inherit name lexer parser; };
+    in rec {
+      regexp-lexer = lexer "regexp" ./regexp.l;
+      regexp-parser = parser "regexp" ./regexp.y;
+      regexp-compiler = compiler "regexp" regexp-lexer regexp-parser;
     });
   };
 }
