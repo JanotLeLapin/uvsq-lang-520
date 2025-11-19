@@ -94,11 +94,11 @@ void free_expr_node(struct expr_node *node) {
         break;
     case EXPR_NODE_ADD:
     case EXPR_NODE_CAT:
-        free(node->value.binary.left);
-        free(node->value.binary.right);
+        free_expr_node(node->value.binary.left);
+        free_expr_node(node->value.binary.right);
         break;
     case EXPR_NODE_ALL:
-        free(node->value.unary);
+        free_expr_node(node->value.unary);
         break;
     }
     free(node);
