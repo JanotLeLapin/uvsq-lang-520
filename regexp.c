@@ -52,13 +52,17 @@ void print_expr_node(struct expr_node *node, int depth) {
         printf("val: '%c'\n", node->value.val);
         break;
     case EXPR_NODE_ADD:
+        printf("binary expr (+):\n");
+        print_expr_node(node->value.binary.left, depth + 1);
+        print_expr_node(node->value.binary.right, depth + 1);
+        break;
     case EXPR_NODE_CAT:
-        printf("binary expr:\n");
+        printf("binary expr (.):\n");
         print_expr_node(node->value.binary.left, depth + 1);
         print_expr_node(node->value.binary.right, depth + 1);
         break;
     case EXPR_NODE_ALL:
-        printf("unary expr:\n");
+        printf("unary expr (*):\n");
         print_expr_node(node->value.unary, depth + 1);
         break;
     }
