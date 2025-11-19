@@ -1,0 +1,7 @@
+UVSQ yacc/flex project
+
+prerequisites: Nix
+
+usage:
+- nix build .#regexp-compiler
+- ./result/bin/regexp-compiler < input_file
