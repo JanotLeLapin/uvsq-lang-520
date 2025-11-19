@@ -1,12 +1,9 @@
 { flex
 , stdenv
-
-, name
-, lexer-file
 }: stdenv.mkDerivation {
-  name = "${name}-lexer";
+  name = "regexp-lexer";
 
-  src = lexer-file;
+  src = ./regexp.l;
   dontUnpack = true;
 
   buildInputs = [

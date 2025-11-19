@@ -2,11 +2,10 @@
 , flex
 , stdenv
 
-, name
-, parser
-, lexer
+, regexp-parser
+, regexp-lexer
 }: stdenv.mkDerivation {
-  name = "${name}-compiler";
+  name = "regexp-compiler";
 
   src = ./.;
   dontUnpack = true;
@@ -16,13 +15,14 @@
     flex
   ];
   buildPhase = ''
-    cp ${parser}/lib/* .
-    cp ${lexer}/lib/* .
-    gcc -o out *.tab.c *.yy.c -L${flex}/lib/lib -lfl
+    cp ${regexp-parser}/lib/y.tab.c .
+    cp ${regexp-parser}/lib/y.tab.h .
+    cp ${regexp-lexer}/lib/lex.yy.c .
+    gcc -o out y.tab.c lex.yy.c -L${flex}/lib/lib -lfl
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp out $out/bin/${name}-compiler
+    cp out $out/bin/regexp-compiler
   '';
 }

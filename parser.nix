@@ -1,12 +1,9 @@
 { bison
 , stdenv
-
-, name
-, parser-file
 }: stdenv.mkDerivation {
-  name = "${name}-parser";
+  name = "regexp-parser";
 
-  src = parser-file;
+  src = ./regexp.y;
   dontUnpack = true;
 
   buildInputs = [
