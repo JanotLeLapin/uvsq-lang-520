@@ -3,7 +3,7 @@
 
 #include "regexp.h"
 
-struct expr_node *make_expr_node(enum expr_node_type type) {
+inline static struct expr_node *make_expr_node(enum expr_node_type type) {
     struct expr_node *node = malloc(sizeof(struct expr_node));
     if (0 == node) {
         return 0;

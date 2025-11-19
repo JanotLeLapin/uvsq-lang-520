@@ -17,7 +17,6 @@ struct expr_node {
   } value;
 };
 
-struct expr_node *make_expr_node(enum expr_node_type type);
 struct expr_node *make_expr_val_node(char val);
 struct expr_node *make_expr_binary_node(enum expr_node_type type, struct expr_node *left, struct expr_node *right);
 struct expr_node *make_expr_unary_node(enum expr_node_type type, struct expr_node *n);
