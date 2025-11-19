@@ -8,7 +8,6 @@
   name = "regexp-compiler";
 
   src = ./.;
-  dontUnpack = true;
 
   buildInputs = [
     gcc
@@ -18,7 +17,7 @@
     cp ${regexp-parser}/lib/y.tab.c .
     cp ${regexp-parser}/lib/y.tab.h .
     cp ${regexp-lexer}/lib/lex.yy.c .
-    gcc -o out y.tab.c lex.yy.c -L${flex}/lib/lib -lfl
+    gcc -o out regexp.c y.tab.c lex.yy.c -L${flex}/lib/lib -lfl
   '';
 
   installPhase = ''
