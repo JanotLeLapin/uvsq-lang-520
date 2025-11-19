@@ -17,7 +17,3 @@ op [+.*]
 .|\n {}
 
 %%
-
-int main() {
-  return 0;
-}

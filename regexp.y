@@ -23,3 +23,12 @@ expr: '(' expr ')'
 	;
 
 %%
+
+int main() {
+    if (0 == yyparse()) {
+        printf("successfully parsed\n");
+    } else {
+        printf("something went wrong\n");
+    }
+    return 0;
+}
