@@ -62,9 +62,9 @@ int main() {
             printf("right:\n");
             print_expr_node(right, 0);
 
-            FWRITE_STATIC("def generate_left()\n", f);
+            FWRITE_STATIC("from automate import *\n\ndef generate_left():\n", f);
             compile_expr(left, f);
-            FWRITE_STATIC("\ndef generate_right()\n", f);
+            FWRITE_STATIC("\ndef generate_right():\n", f);
             compile_expr(right, f);
 
             FWRITE_STATIC("\nif egal(generate_left(), generate_right()):\n    print('EGAL')\nelse:\n    print('NON EGAL')\n", f);
