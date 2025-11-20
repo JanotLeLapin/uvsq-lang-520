@@ -3,6 +3,8 @@
 
 #include "regexp.h"
 
+#define FWRITE_STATIC(str, f) fwrite(str, 1, sizeof(str), f)
+
 extern int yylex(void);
 int yyerror(const char *s) {
     fprintf(stderr, "parser error: %s\n", s);
@@ -60,9 +62,12 @@ int main() {
             printf("right:\n");
             print_expr_node(right, 0);
 
+            FWRITE_STATIC("def generate_left()\n", f);
             compile_expr(left, f);
-            fwrite("\n", 1, 1, f);
+            FWRITE_STATIC("\ndef generate_right()\n", f);
             compile_expr(right, f);
+
+            FWRITE_STATIC("\nif egal(generate_left(), generate_right()):\n    print('EGAL')\nelse:\n    print('NON EGAL')\n", f);
 
             free_expr_node(left);
             free_expr_node(right);

@@ -126,7 +126,7 @@ int compile_expr(struct expr_node *node, FILE *f) {
     while (-1 != top_post) {
         tmp = stack_pop(stack_post, &top_post);
 
-        len = snprintf(buf, sizeof(buf), "a%d = ", max - top_post);
+        len = snprintf(buf, sizeof(buf), "    a%d = ", max - top_post);
 
         switch (tmp->type) {
         case EXPR_NODE_VAL:
@@ -145,7 +145,7 @@ int compile_expr(struct expr_node *node, FILE *f) {
         fwrite(buf, 1, len, f);
     }
 
-    len = snprintf(buf, sizeof(buf), "a%d = tout_faire(a%d)\n", max + 2, max + 1);
+    len = snprintf(buf, sizeof(buf), "    return tout_faire(a%d)\n", max + 1);
     fwrite(buf, 1, len, f);
 
     return 0;
