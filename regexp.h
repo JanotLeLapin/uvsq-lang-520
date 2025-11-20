@@ -1,3 +1,8 @@
+#ifndef _REGEXP_H
+#define _REGEXP_H
+
+#include <stdio.h>
+
 enum expr_node_type {
   EXPR_NODE_VAL = 0x00,
   EXPR_NODE_ADD = 0x10,
@@ -23,3 +28,7 @@ struct expr_node *make_expr_unary_node(enum expr_node_type type, struct expr_nod
 
 void print_expr_node(struct expr_node *node, int depth);
 void free_expr_node(struct expr_node *node);
+
+int compile_expr(struct expr_node *node, FILE *f);
+
+#endif

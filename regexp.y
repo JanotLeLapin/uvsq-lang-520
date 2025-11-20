@@ -43,16 +43,30 @@ expr:
 %%
 
 int main() {
+    FILE *f;
+
     if (0 == yyparse()) {
         printf("successfully parsed\n");
         if (0 != left && 0 != right) {
+            f = fopen("main.py", "a");
+            if (0 == f) {
+                free_expr_node(left);
+                free_expr_node(right);
+                return 1;
+            }
+
             printf("left:\n");
             print_expr_node(left, 0);
             printf("right:\n");
             print_expr_node(right, 0);
 
+            compile_expr(left, f);
+            compile_expr(right, f);
+
             free_expr_node(left);
             free_expr_node(right);
+
+            fclose(f);
         }
     } else {
         printf("something went wrong\n");
