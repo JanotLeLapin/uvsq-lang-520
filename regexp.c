@@ -99,7 +99,8 @@ inline struct expr_node *stack_pop(struct expr_node **stack, int *top) {
 
 int compile_expr(struct expr_node *node, FILE *f) {
     struct expr_node *stack_pre[64], *stack_post[64], *tmp;
-    int top_pre = -1, top_post = -1;
+    int top_pre = -1, top_post = -1, max, len;
+    char buf[1024], *p;
 
     stack_push(stack_pre, &top_pre, node);
 
@@ -121,24 +122,31 @@ int compile_expr(struct expr_node *node, FILE *f) {
         }
     }
 
+    max = top_post;
     while (-1 != top_post) {
         tmp = stack_pop(stack_post, &top_post);
 
+        len = snprintf(buf, sizeof(buf), "a%d = ", max - top_post);
+
         switch (tmp->type) {
         case EXPR_NODE_VAL:
-            fwrite("val\n", 1, 4, f);
+            len += snprintf(buf + len, sizeof(buf) - len, "automate(\"%c\")\n", tmp->value.val);
             break;
         case EXPR_NODE_ADD:
-            fwrite("add\n", 1, 4, f);
+            len += snprintf(buf + len, sizeof(buf) - len, "union(a%d, a%d)\n", max - top_post - 1, max - top_post - 2);
             break;
         case EXPR_NODE_CAT:
-            fwrite("cat\n", 1, 4, f);
+            len += snprintf(buf + len, sizeof(buf) - len, "concatenation(a%d, a%d)\n", max - top_post - 1, max - top_post - 2);
             break;
         case EXPR_NODE_ALL:
-            fwrite("all\n", 1, 4, f);
+            len += snprintf(buf + len, sizeof(buf) - len, "etoile(a%d)\n", max - top_post - 1);
             break;
         }
+        fwrite(buf, 1, len, f);
     }
+
+    len = snprintf(buf, sizeof(buf), "a%d = tout_faire(a%d)\n", max + 2, max + 1);
+    fwrite(buf, 1, len, f);
 
     return 0;
 }

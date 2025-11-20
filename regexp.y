@@ -61,6 +61,7 @@ int main() {
             print_expr_node(right, 0);
 
             compile_expr(left, f);
+            fwrite("\n", 1, 1, f);
             compile_expr(right, f);
 
             free_expr_node(left);
