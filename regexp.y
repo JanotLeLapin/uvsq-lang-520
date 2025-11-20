@@ -3,7 +3,7 @@
 
 #include "regexp.h"
 
-#define FWRITE_STATIC(str, f) fwrite(str, 1, sizeof(str), f)
+#define FWRITE_STATIC(str, f) fwrite(str, 1, sizeof(str) - 1, f)
 
 extern int yylex(void);
 int yyerror(const char *s) {
