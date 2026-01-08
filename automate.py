@@ -119,9 +119,27 @@ def union(a1, a2):
 
 
 def etoile(a):
-    """Retourne l'automate qui reconnaît l'étoile de Kleene du 
-    langage reconnu par l'automate a""" 
-    return a
+    """Retourne l'automate qui reconnaît l'étoile de Kleene du
+    langage reconnu par l'automate a"""
+    a = cp.deepcopy(a)
+
+    res = automate()
+    res.n = 1 + a.n
+    res.name = f"({a.name})*"
+
+    offset = 1
+
+    for (etat, char), destinations in a.transition.items():
+        res.transition[(etat + offset, char)] = [d + offset for d in destinations]
+
+    res.ajoute_transition(0, "E", [0 + offset])
+
+    for f in a.final:
+        res.ajoute_transition(f + offset, "E", [0 + offset])
+
+    res.final = [0] + [f + offset for f in a.final]
+
+    return res
 
 
 def acces_epsilon(a):
