@@ -252,7 +252,33 @@ def completion(a):
     """ retourne l'automate a complété
         l'automate en entrée doit être déterministe
     """
-    return a
+    a = cp.deepcopy(a)
+    poubelle_needed = False
+
+    for i in range(a.n):
+        for char in a.alphabet:
+            if (i, char) not in a.transition:
+                poubelle_needed = True
+                break
+        if poubelle_needed:
+            break
+
+    if not poubelle_needed:
+        return a
+
+    res = a
+    poubelle_state = res.n
+    res.n += 1
+
+    for i in range(poubelle_state):
+        for char in res.alphabet:
+            if (i, char) not in res.transition:
+                res.transition[(i, char)] = [poubelle_state]
+
+    for char in res.alphabet:
+        res.transition[(poubelle_state, char)] = [poubelle_state]
+
+    return res
 
 
 ###################################################
