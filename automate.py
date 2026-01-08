@@ -361,6 +361,46 @@ def egal(a1, a2):
     """ retourne True si a1 et a2 sont isomorphes
         a1 et a2 doivent être minimaux
     """
+    if len(a1.alphabet) != len(a2.alphabet):
+        return False
+    if a1.n != a2.n:
+        return False
+    if len(a1.final) != len(a2.final):
+        return False
+
+    mapping = {0: 0}
+    queue = [0]
+    visited = {0}
+
+    while queue:
+        u1 = queue.pop(0)
+        u2 = mapping[u1]
+
+        if (u1 in a1.final) != (u2 in a2.final):
+            return False
+
+        for char in a1.alphabet:
+            dest1 = a1.transition.get((u1, char), [])
+            dest2 = a2.transition.get((u2, char), [])
+
+            if bool(dest1) != bool(dest2):
+                return False
+
+            if not dest1:
+                continue
+
+            v1 = dest1[0]
+            v2 = dest2[0]
+
+            if v1 in mapping:
+                if mapping[v1] != v2:
+                    return False
+            else:
+                mapping[v1] = v2
+                if v1 not in visited:
+                    visited.add(v1)
+                    queue.append(v1)
+
     return True
 
 
