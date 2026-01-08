@@ -69,9 +69,27 @@ class automate:
 
 
 def concatenation(a1, a2): 
-    """Retourne l'automate qui reconnaît la concaténation des 
+    """Retourne l'automate qui reconnaît la concaténation des
     langages reconnus par les automates a1 et a2"""
-    return a
+    a1 = cp.deepcopy(a1)
+    a2 = cp.deepcopy(a2)
+
+    res = automate()
+    res.n = a1.n + a2.n
+    res.name = f"({a1.name}.{a2.name})"
+
+    res.transition = cp.deepcopy(a1.transition)
+
+    offset = a1.n
+    for (etat, char), destinations in a2.transition.items():
+        res.transition[(etat + offset, char)] = [d + offset for d in destinations]
+
+    for f in a1.final:
+        res.ajoute_transition(f, "E", [0 + offset])
+
+    res.final = [f + offset for f in a2.final]
+
+    return res
 
 
 def union(a1, a2):
