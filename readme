@@ -1,13 +1,11 @@
 UVSQ yacc/flex project
 
-prerequisites: Nix
-
-I happen to be running NixOS (an immutable operating system) where
-libraries aren't located in a convenient /lib or /usr/lib, so
-shipping a typical Makefile would be annoying expecially for
-the linker. Nix derivations solve the same problem as Makefiles,
-but in a more predictable, reproducible and portable way.
-
 usage:
-- nix build .#regexp-compiler
-- ./result/bin/regexp-compiler < input_file
+
+make
+./regexp-compiler < test.1
+
+or
+
+nix build .#regexp-compiler
+./result/bin/regexp-compiler < test.1
