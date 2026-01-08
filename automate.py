@@ -93,9 +93,29 @@ def concatenation(a1, a2):
 
 
 def union(a1, a2):
-    """Retourne l'automate qui reconnaît l'union des 
-    langages reconnus par les automates a1 et a2""" 
-    return a
+    """Retourne l'automate qui reconnaît l'union des
+    langages reconnus par les automates a1 et a2"""
+    a1 = cp.deepcopy(a1)
+    a2 = cp.deepcopy(a2)
+
+    res = automate()
+    res.n = 1 + a1.n + a2.n
+    res.name = f"({a1.name}|{a2.name})"
+
+    offset1 = 1
+    offset2 = 1 + a1.n
+
+    for (etat, char), destinations in a1.transition.items():
+        res.transition[(etat + offset1, char)] = [d + offset1 for d in destinations]
+
+    for (etat, char), destinations in a2.transition.items():
+        res.transition[(etat + offset2, char)] = [d + offset2 for d in destinations]
+
+    res.ajoute_transition(0, "E", [0 + offset1, 0 + offset2])
+
+    res.final = [f + offset1 for f in a1.final] + [f + offset2 for f in a2.final]
+
+    return res
 
 
 def etoile(a):
