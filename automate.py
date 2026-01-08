@@ -199,8 +199,53 @@ def determinisation(a):
     """ retourne l'automate équivalent déterministe
         la construction garantit que tous les états sont accessibles
         automate d'entrée sans epsilon-transitions
-    """        
-    return a
+    """
+    res = automate()
+    res.name = "Det(" + a.name + ")"
+
+    start_set = frozenset([0])
+
+    mapping = {start_set: 0}
+
+    queue = [start_set]
+
+    compteur = 1
+
+    new_transitions = {}
+    new_finals = []
+
+    if any(s in a.final for s in start_set):
+        new_finals.append(0)
+
+    while queue:
+        current_set = queue.pop(0)
+        u = mapping[current_set]
+
+        for char in a.alphabet:
+            next_states = set()
+            for s in current_set:
+                if (s, char) in a.transition:
+                    next_states.update(a.transition[(s, char)])
+
+            if not next_states:
+                continue
+
+            next_frozenset = frozenset(next_states)
+
+            if next_frozenset not in mapping:
+                mapping[next_frozenset] = compteur
+                queue.append(next_frozenset)
+                if any(s in a.final for s in next_states):
+                    new_finals.append(compteur)
+                compteur += 1
+
+            v = mapping[next_frozenset]
+            new_transitions[(u, char)] = [v]
+
+    res.n = compteur
+    res.final = new_finals
+    res.transition = new_transitions
+    return res
 
 
 def completion(a):
