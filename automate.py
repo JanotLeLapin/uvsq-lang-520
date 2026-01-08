@@ -1,5 +1,5 @@
+# version 2: correction d'un bug dans la fonction minimisation
 import copy as cp
-
 
 class automate:
     """
@@ -7,15 +7,15 @@ class automate:
     l'alphabet est l'ensemble des caractères alphabétiques minuscules et "E" pour epsilon, 
     et "O" pour l'automate vide
     """
-    
+
     def __init__(self, expr="O"):
         """
         construit un automate élémentaire pour une expression régulière expr 
-            réduite à un caractère de l'alphabet, ou automate vide si "O"
+        réduite à un caractère de l'alphabet, ou automate vide si "O"
         identifiant des états = entier de 0 à n-1 pour automate à n états
         état initial = état 0
         """
-        
+
         # alphabet
         self.alphabet = list("abc")
         # l'expression doit contenir un et un seul caractère de l'alphabet
@@ -41,7 +41,8 @@ class automate:
         self.transition =  {} if (expr in ["O", "E"]) else {(0,expr): [1]}
         # nom de l'automate: obtenu par application des règles de construction
         self.name = "" if expr == "O" else "(" + expr + ")" 
-        
+
+
     def __str__(self):
         """affichage de l'automate par fonction print"""
         res = "Automate " + self.name + "\n"
@@ -52,7 +53,8 @@ class automate:
             res += str(k) + ": " + str(v) + "\n"
         res += "*********************************"
         return res
-    
+
+
     def ajoute_transition(self, q0, a, qlist):
         """ ajoute la liste de transitions (q0, a, q1) pour tout q1 
             dans qlist à l'automate
@@ -64,8 +66,8 @@ class automate:
             self.transition[(q0, a)] = self.transition[(q0, a)] + qlist
         else:
             self.transition.update({(q0, a): qlist})
-    
-    
+
+
 def concatenation(a1, a2): 
     """Retourne l'automate qui reconnaît la concaténation des 
     langages reconnus par les automates a1 et a2"""
@@ -135,22 +137,26 @@ def supression_epsilon_transitions(a):
             if c[1] != "E" and c[0] in acces[i]:
                 res.ajoute_transition(i, c[1], v)
     return res
-        
-        
+
+
 def determinisation(a):
     """ retourne l'automate équivalent déterministe
         la construction garantit que tous les états sont accessibles
         automate d'entrée sans epsilon-transitions
     """        
     return a
-    
-    
+
+
 def completion(a):
     """ retourne l'automate a complété
         l'automate en entrée doit être déterministe
     """
     return a
 
+
+###################################################
+# version corrigée de la fonction de minimisation #
+###################################################
 
 def minimisation(a):
     """ retourne l'automate minimum
@@ -161,12 +167,12 @@ def minimisation(a):
     a = cp.deepcopy(a)
     res = automate()
     res.name = a.name
-    
+
     # Étape 1 : partition initiale = finaux / non finaux
     part = [set(a.final), set(range(a.n)) - set(a.final)]
     # on retire les ensembles vides
     part = [e for e in part if e != set()]  
-    
+
     # Étape 2 : raffinement jusqu’à stabilité
     modif = True
     while modif:
@@ -190,8 +196,13 @@ def minimisation(a):
                 new_part.extend(classes.values())
             else:
                 new_part.append(e)
-        part = new_part    
-     
+        part = new_part
+    # on réordonne la partition pour que le premier sous-ensemble soit celui qui contient l'état initial
+    for i, e in enumerate(part):
+        if 0 in e:
+            part[0], part[i] = part[i], part[0]
+            break
+
     # Étape 3 : on construit le nouvel automate minimal
     mapping = {}
     # on associe à chaque état q le nouvel état i
@@ -209,7 +220,7 @@ def minimisation(a):
             q = a.transition[(representant, c)][0]
             res.transition[(i, c)] = [mapping[q]]
     return res
-    
+
 
 def tout_faire(a):
     a1 = supression_epsilon_transitions(a)
@@ -224,7 +235,6 @@ def egal(a1, a2):
         a1 et a2 doivent être minimaux
     """
     return True
-
 
 
 # TESTS
