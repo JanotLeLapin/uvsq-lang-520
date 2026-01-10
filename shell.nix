@@ -1,5 +1,6 @@
 { gcc
 , flex
+, bison
 , python3
 , python3Packages
 , clang-tools
@@ -7,7 +8,7 @@
 , mkShell
 }: mkShell {
   buildInputs = [
-    gcc flex python3
+    gcc flex bison python3
     python3Packages.python-lsp-server clang-tools
     valgrind
   ];

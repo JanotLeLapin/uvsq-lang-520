@@ -1,7 +1,7 @@
 # Outils de compil, on utilise bison pour être tranquille sur WSL
 CC = gcc
 LEX = flex
-YACC = bison
+YACC = yacc
 CFLAGS = -Wall -g 
 LDFLAGS = -lfl
 
