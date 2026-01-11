@@ -37,10 +37,10 @@ program:
 expr:
     '(' expr ')'      { $$ = $2; }
     | expr '+' expr   { $$ = make_expr_binary_node(EXPR_NODE_ADD, $1, $3); }
-	| expr '.' expr   { $$ = make_expr_binary_node(EXPR_NODE_CAT, $1, $3); }
-	| expr '*'        { $$ = make_expr_unary_node(EXPR_NODE_ALL, $1); }
-	| CONST           { $$ = make_expr_val_node($1); }
-	;
+    | expr '.' expr   { $$ = make_expr_binary_node(EXPR_NODE_CAT, $1, $3); }
+    | expr '*'        { $$ = make_expr_unary_node(EXPR_NODE_ALL, $1); }
+    | CONST           { $$ = make_expr_val_node($1); }
+    ;
 
 %%
 
